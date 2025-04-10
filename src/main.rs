@@ -2,12 +2,12 @@ mod view;
 
 fn main() -> Result<(), String> {
 
-    let scrn_width: u32 = 1000;
-    let scrn_height: u32 = 1000;
+    let wnd_width: u32 = 1000;
+    let wnd_height: u32 = 1000;
 
     let sdl_context = sdl2::init()?;
     let vid_subsystem = sdl_context.video()?;
-    let wnd = vid_subsystem.window("snake", scrn_width, scrn_height)
+    let wnd = vid_subsystem.window("snake", wnd_width, wnd_height)
         .build()
         .unwrap();
 
@@ -15,10 +15,11 @@ fn main() -> Result<(), String> {
         .build()
         .unwrap();
 
+    // TODO: Why is the board off center from the window???
     // Create board_view
-    let mut board = view::board::Board::new((scrn_width/2 - scrn_width*9/20).try_into().unwrap(),
-                                            (scrn_height/2 - scrn_height*9/20).try_into().unwrap(),
-                                            scrn_width*9/10, scrn_height*9/10);
+    let mut board = view::board::Board::new((wnd_width/20 - 5).try_into().unwrap(),
+                                            (wnd_height/20 - 5).try_into().unwrap(),
+                                            wnd_width*9/10, wnd_height*9/10);
     // Create game_state
     
     let mut running: bool = true;

@@ -1,4 +1,5 @@
 mod view;
+mod model;
 
 fn main() -> Result<(), String> {
 
@@ -15,12 +16,8 @@ fn main() -> Result<(), String> {
         .build()
         .unwrap();
 
-    // TODO: Why is the board off center from the window???
-    // Create board_view
-    let mut board = view::board::Board::new((wnd_width/20 - 5).try_into().unwrap(),
-                                            (wnd_height/20 - 5).try_into().unwrap(),
-                                            wnd_width*9/10, wnd_height*9/10);
     // Create game_state
+    let mut game = model::game::Game::new(wnd_width, wnd_height);
     
     let mut running: bool = true;
     let mut event_queue = sdl_context.event_pump().unwrap();
@@ -35,14 +32,11 @@ fn main() -> Result<(), String> {
             }
         }
 
+        game.clear_wnd(&mut canvas);
 
-        // Black background color
-        canvas.set_draw_color(sdl2::pixels::Color::RGB(0, 0, 0));
-        canvas.clear(); // Paint the background color
-        
-        board.render(&mut canvas);
+        game.update();
 
-        canvas.present();
+        game.draw_wnd(&mut canvas);
     }
     
 

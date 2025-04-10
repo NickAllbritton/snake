@@ -1,4 +1,4 @@
-
+mod view;
 
 fn main() -> Result<(), String> {
 
@@ -16,7 +16,9 @@ fn main() -> Result<(), String> {
         .unwrap();
 
     // Create board_view
-
+    let mut board = view::board::Board::new((scrn_width/2 - scrn_width*9/20).try_into().unwrap(),
+                                            (scrn_height/2 - scrn_height*9/20).try_into().unwrap(),
+                                            scrn_width*9/10, scrn_height*9/10);
     // Create game_state
     
     let mut running: bool = true;
@@ -36,7 +38,9 @@ fn main() -> Result<(), String> {
         // Black background color
         canvas.set_draw_color(sdl2::pixels::Color::RGB(0, 0, 0));
         canvas.clear(); // Paint the background color
-    
+        
+        board.render(&mut canvas);
+
         canvas.present();
     }
     

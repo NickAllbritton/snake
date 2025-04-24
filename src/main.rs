@@ -28,6 +28,9 @@ fn main() -> Result<(), String> {
                 sdl2::event::Event::Quit {..} => {
                     running = false;
                 }
+                sdl2::event::Event::KeyDown {keycode, ..} => {
+                    game.handle_key_press(keycode.unwrap());
+                }
                 _ => {}
             }
         }

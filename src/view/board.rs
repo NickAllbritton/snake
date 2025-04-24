@@ -4,6 +4,7 @@ use sdl2::render::Canvas;
 use sdl2::video::Window;
 
 use crate::view::tile::{Tile, TileType};
+use crate::model::snake::Snake;
 
 pub struct Board {
     pub board_area: Rect,
@@ -17,7 +18,7 @@ impl Board {
         Self {
             board_area: Rect::new(posx, posy, width, height),
             goal_color: Color::RGB(100, 100, 100),
-            tiles: [Tile::new(0, 0, TileType::SnakeBody); 400]
+            tiles: [Tile::new(0, 0, TileType::Empty); 400]
         }
     }
 
@@ -25,12 +26,17 @@ impl Board {
         return &mut self.tiles[posx + posy * 20];
     }
 
+    pub fn vacate_tile(&mut self, posx: usize, posy: usize) {
+        self.tile_at(posx, posy).ttype = TileType::Empty;
+    }
+
     /*fn generate_board() -> [Tile; 400] {  
         let temp_tiles: 
     }*/
 
-    pub fn render(&self, canvas: &mut Canvas<Window>) {
+    pub fn render(&mut self, snake: &Snake, canvas: &mut Canvas<Window>) {
         self.draw_edges(canvas);
+        self.draw_snake(snake);
         self.draw_tiles(canvas);
     }
 
@@ -58,6 +64,13 @@ impl Board {
             Point::new(self.board_area.x, self.board_area.y + self.board_area.h),
             Point::new(self.board_area.x + self.board_area.w, self.board_area.y + self.board_area.h)
         );
+    }
+
+    fn draw_snake(&mut self, snake: &Snake)
+    {
+        for tile in snake.body.clone() {
+            *self.tile_at(tile.x as usize, tile.y as usize) = tile.clone(); 
+        }
     }
 
     fn draw_tiles(&self, canvas: &mut Canvas<Window>)

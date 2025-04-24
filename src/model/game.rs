@@ -1,12 +1,17 @@
 use sdl2::render::Canvas;
 use sdl2::video::Window;
+use glam::IVec2;
 
 use crate::view::board::Board;
+use crate::model::snake::{Snake, Direction};
+use crate::model::time::FrameTimer;
 
 pub struct Game {
     //wnd_width: u32,
     //wnd_height: u32,
-    pub board: Board
+    pub board: Board,
+    pub snake: Snake,
+    pub ft: FrameTimer
 }
 
 impl Game {
@@ -17,12 +22,14 @@ impl Game {
             //wnd_height: window_height,
             board: Board::new((window_width/20 - 5).try_into().unwrap(),
                                 (window_height/20 - 5).try_into().unwrap(),
-                                window_width*9/10, window_height*9/10)
+                                window_width*9/10, window_height*9/10),
+            snake: Snake::new(IVec2 {x: 10, y: 10}),
+            ft: FrameTimer::new()
         }
     }
 
-    pub fn draw_wnd(&self, canvas: &mut Canvas<Window>) {
-        self.board.render(canvas);
+    pub fn draw_wnd(&mut self, canvas: &mut Canvas<Window>) {
+        self.board.render(&self.snake, canvas);
         canvas.present();
     }
 
@@ -33,7 +40,36 @@ impl Game {
         canvas.clear(); // Paint the background color
     }
 
-    pub fn update(&self) {
+    pub fn update(&mut self) {
         // TODO: Update according to game logic
+        //
+        // If 50 milliseconds has passed since last update, update
+        if !self.ft.mark(50) {
+            return;
+        }
+
+
+        if self.snake.within_board() {
+            self.snake.move_once(&mut self.board);
+        }
+    }
+
+    pub fn handle_key_press(&mut self, key: sdl2::keyboard::Keycode)
+    {
+        match key {
+            sdl2::keyboard::Keycode::Up => {
+                self.snake.dir = Direction::Up;
+            },
+            sdl2::keyboard::Keycode::Down => {
+                self.snake.dir = Direction::Down;
+            },
+            sdl2::keyboard::Keycode::Left => {
+                self.snake.dir = Direction::Left;
+            },
+            sdl2::keyboard::Keycode::Right => {
+                self.snake.dir = Direction::Right;
+            },
+            _ => {/*Do nothing*/}
+        }
     }
 }

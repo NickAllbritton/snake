@@ -33,14 +33,21 @@ impl Goal {
     }
 
     pub fn respawn(&mut self, snake: &Snake) {
+        println!("-----------------Respawning------------------");
         let mut rng = rand::rng();
-        let newx = rng.random_range(0..20);
-        let newy = rng.random_range(0..20);
-        for tile in snake.body.clone() {
-            if tile.x == newx || tile.y == newy {
-                self.respawn(snake);
-                break;
+        let mut newx = rng.random_range(0..20);
+        let mut newy = rng.random_range(0..20);
+        let mut i: usize = 0;
+        while i < snake.body.len() {
+            // If a conflict occurs regenerate the position and try again
+            if snake.body[i].x == newx && snake.body[i].y == newy {
+                println!("New pos: ({}, {})", newx, newy);
+                println!("Snake: ({}, {})", snake.body[i].x, snake.body[i].y);
+                newx = rng.random_range(0..20);
+                newy = rng.random_range(0..20);
+                i = 0;
             }
+            i += 1;
         }
         // If this point is reached then there is no conflict with the snake pos
         self.tile.x = newx;

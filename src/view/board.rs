@@ -85,9 +85,9 @@ impl Board {
     fn draw_tile(&self, posx: usize, posy: usize, canvas: &mut Canvas<Window>)
     {
         // Calculate the window coordinates from the board position
-        let x: i32 = self.board_area.x() + 2 + i32::try_from(posx).unwrap() * ((self.board_area.width() as i32)-2)/20;
-        let y: i32 = self.board_area.y() + 2 + i32::try_from(posy).unwrap() * ((self.board_area.height() as i32)-2)/20;
-        let tile_rect: Rect = Rect::new(x + 3, y + 3, self.board_area.width()/20 - 6, self.board_area.height()/20 - 6);
+        let x: i32 = self.board_area.x() + i32::try_from(posx).unwrap() * (self.board_area.width() as i32)/20;
+        let y: i32 = self.board_area.y() + i32::try_from(posy).unwrap() * (self.board_area.height() as i32)/20;
+        let tile_rect: Rect = Rect::new(x + 1, y + 1, self.board_area.width()/20 - 1, self.board_area.height()/20 - 1);
         // Assume the correct draw color is set in the canvas
         let _ = canvas.fill_rect(tile_rect);
     }

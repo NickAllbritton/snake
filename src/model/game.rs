@@ -53,6 +53,7 @@ impl Game {
         
         if self.snake.alive() {
             if self.snake.within_board() {
+                self.snake.try_eat_goal(&mut self.goal);
                 self.snake.move_once(&mut self.board);
             }
             else {
@@ -60,7 +61,7 @@ impl Game {
             }
         }
         else {
-            
+            // TODO: Show final score or something
         }
     }
 

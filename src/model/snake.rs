@@ -3,6 +3,7 @@ use rand::Rng;
 
 use crate::view::tile::{Tile, TileType};
 use crate::view::board::Board;
+use crate::model::goal::Goal;
 
 
 pub enum Direction {
@@ -43,7 +44,8 @@ impl Direction {
 pub struct Snake {
     pub dir: Direction,
     pub body: Vec<Tile>,
-    alive: bool
+    alive: bool,
+    grow: bool
 }
 
 impl Snake {
@@ -56,7 +58,8 @@ impl Snake {
         Self {
             dir: rand_direction,
             body: vec![head_tile, tail_tile],
-            alive: true
+            alive: true,
+            grow: false
         }
     }
 
@@ -76,6 +79,17 @@ impl Snake {
             && nexty_head >= 0 && nexty_head < 20;
     }
 
+    pub fn try_eat_goal(&mut self, goal: &mut Goal)
+    {
+        let nextx_head = self.body[0].x + self.dir.vec().x;
+        let nexty_head = self.body[0].y + self.dir.vec().y;
+
+        if goal.tile.x == nextx_head && goal.tile.y == nexty_head {
+            self.grow = true;
+            goal.respawn(&self);
+        }
+    }
+
     pub fn move_once(&mut self, board: &mut Board) {
         // Move the head in the direction snake is moving
         // First store the position of the current head 
@@ -84,7 +98,14 @@ impl Snake {
         self.body[0].y += self.dir.vec().y;
        
         for i in 1..self.body.len() {
-            board.vacate_tile(self.body[i].x as usize, self.body[i].y as usize);
+            if self.grow && i == self.body.len()-1 {
+                // If grow is set to true, do not vacate the last tile
+                self.body.push(self.body[i]);
+                self.grow = false;
+            }
+            else {
+                board.vacate_tile(self.body[i].x as usize, self.body[i].y as usize);
+            }
             let tmp_vacated_tile = (self.body[i].x, self.body[i].y);
             self.body[i].x = pos_vacated_tile.0;
             self.body[i].y = pos_vacated_tile.1;

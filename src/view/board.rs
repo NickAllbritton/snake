@@ -18,7 +18,7 @@ impl Board {
     pub fn new(posx: i32, posy: i32, width: u32, height: u32) -> Self {
         Self {
             board_area: Rect::new(posx, posy, width, height),
-            goal_color: Color::RGB(200, 80, 200),
+            goal_color: Color::RGB(150, 140, 200),
             tiles: [Tile::new(0, 0, TileType::Empty); 400]
         }
     }

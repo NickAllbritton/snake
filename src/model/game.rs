@@ -4,15 +4,16 @@ use glam::IVec2;
 
 use crate::view::board::Board;
 use crate::model::snake::{Snake, Direction};
+use crate::model::goal::Goal;
 use crate::model::time::FrameTimer;
 
 pub struct Game {
     //wnd_width: u32,
     //wnd_height: u32,
     pub board: Board,
+    pub goal: Goal,
     pub snake: Snake,
-    pub ft: FrameTimer,
-    pub alive: bool
+    pub ft: FrameTimer
 }
 
 impl Game {
@@ -24,14 +25,14 @@ impl Game {
             board: Board::new((window_width/20 - 5).try_into().unwrap(),
                                 (window_height/20 - 5).try_into().unwrap(),
                                 window_width*9/10, window_height*9/10),
+            goal: Goal::new(),
             snake: Snake::new(IVec2 {x: 10, y: 10}),
-            ft: FrameTimer::new(),
-            alive: true
+            ft: FrameTimer::new()
         }
     }
 
     pub fn draw_wnd(&mut self, canvas: &mut Canvas<Window>) {
-        self.board.render(&self.snake, canvas);
+        self.board.render(&self.goal, &self.snake, canvas);
         canvas.present();
     }
 

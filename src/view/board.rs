@@ -5,6 +5,7 @@ use sdl2::video::Window;
 
 use crate::view::tile::{Tile, TileType};
 use crate::model::snake::Snake;
+use crate::model::goal::Goal;
 
 pub struct Board {
     pub board_area: Rect,
@@ -17,7 +18,7 @@ impl Board {
     pub fn new(posx: i32, posy: i32, width: u32, height: u32) -> Self {
         Self {
             board_area: Rect::new(posx, posy, width, height),
-            goal_color: Color::RGB(100, 100, 100),
+            goal_color: Color::RGB(200, 80, 200),
             tiles: [Tile::new(0, 0, TileType::Empty); 400]
         }
     }
@@ -34,8 +35,9 @@ impl Board {
         let temp_tiles: 
     }*/
 
-    pub fn render(&mut self, snake: &Snake, canvas: &mut Canvas<Window>) {
+    pub fn render(&mut self, goal: &Goal, snake: &Snake, canvas: &mut Canvas<Window>) {
         self.draw_edges(canvas);
+        self.draw_goal(goal);
         self.draw_snake(snake);
         self.draw_tiles(snake, canvas);
     }
@@ -66,15 +68,17 @@ impl Board {
         );
     }
 
-    fn draw_snake(&mut self, snake: &Snake)
-    {
+    fn draw_goal(&mut self, goal: &Goal) {
+        self.tile_at(goal.tile.x as usize, goal.tile.y as usize).ttype = TileType::Goal;
+    }
+
+    fn draw_snake(&mut self, snake: &Snake) {
         for tile in snake.body.clone() {
             *self.tile_at(tile.x as usize, tile.y as usize) = tile.clone(); 
         }
     }
 
-    fn draw_tiles(&self, snake: &Snake, canvas: &mut Canvas<Window>)
-    {
+    fn draw_tiles(&self, snake: &Snake, canvas: &mut Canvas<Window>) {
         for y in 0..20 {
             for x in 0..20 {
                 let cur_tile_type = self.tiles[x + 20 * y].ttype.clone();
@@ -101,8 +105,7 @@ impl Board {
         }
     }
 
-    fn draw_tile(&self, posx: usize, posy: usize, canvas: &mut Canvas<Window>)
-    {
+    fn draw_tile(&self, posx: usize, posy: usize, canvas: &mut Canvas<Window>) {
         // Calculate the window coordinates from the board position
         let x: i32 = self.board_area.x() + i32::try_from(posx).unwrap() * (self.board_area.width() as i32)/20;
         let y: i32 = self.board_area.y() + i32::try_from(posy).unwrap() * (self.board_area.height() as i32)/20;

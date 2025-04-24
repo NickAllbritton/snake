@@ -11,7 +11,8 @@ pub struct Game {
     //wnd_height: u32,
     pub board: Board,
     pub snake: Snake,
-    pub ft: FrameTimer
+    pub ft: FrameTimer,
+    pub alive: bool
 }
 
 impl Game {
@@ -24,7 +25,8 @@ impl Game {
                                 (window_height/20 - 5).try_into().unwrap(),
                                 window_width*9/10, window_height*9/10),
             snake: Snake::new(IVec2 {x: 10, y: 10}),
-            ft: FrameTimer::new()
+            ft: FrameTimer::new(),
+            alive: true
         }
     }
 
@@ -44,13 +46,20 @@ impl Game {
         // TODO: Update according to game logic
         //
         // If 50 milliseconds has passed since last update, update
-        if !self.ft.mark(50) {
+        if !self.ft.mark(100) {
             return;
         }
-
-
-        if self.snake.within_board() {
-            self.snake.move_once(&mut self.board);
+        
+        if self.snake.alive() {
+            if self.snake.within_board() {
+                self.snake.move_once(&mut self.board);
+            }
+            else {
+                self.snake.die();
+            }
+        }
+        else {
+            
         }
     }
 

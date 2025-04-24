@@ -42,8 +42,8 @@ impl Direction {
 
 pub struct Snake {
     pub dir: Direction,
-    pub velocity: f32,
-    pub body: Vec<Tile>
+    pub body: Vec<Tile>,
+    alive: bool
 }
 
 impl Snake {
@@ -55,14 +55,25 @@ impl Snake {
         let tail_tile = Tile::new(pos_tail.x, pos_tail.y, TileType::SnakeBody);
         Self {
             dir: rand_direction,
-            velocity: 0.25, // Temporary value
-            body: vec![head_tile, tail_tile]
+            body: vec![head_tile, tail_tile],
+            alive: true
         }
     }
 
+    pub fn alive(&self) -> bool {
+        return self.alive;
+    }
+
+    pub fn die(&mut self) {
+        self.alive = false;
+    }
+
     pub fn within_board(&self) -> bool {
-        return self.body[0].x >= 0 && self.body[0].y >= 0 
-            && self.body[0].x < 20 && self.body[0].y < 20
+        let nextx_head = self.body[0].x + self.dir.vec().x;
+        let nexty_head = self.body[0].y + self.dir.vec().y;
+
+        return nextx_head >= 0 && nextx_head < 20
+            && nexty_head >= 0 && nexty_head < 20;
     }
 
     pub fn move_once(&mut self, board: &mut Board) {

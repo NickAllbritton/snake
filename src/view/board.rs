@@ -37,7 +37,7 @@ impl Board {
     pub fn render(&mut self, snake: &Snake, canvas: &mut Canvas<Window>) {
         self.draw_edges(canvas);
         self.draw_snake(snake);
-        self.draw_tiles(canvas);
+        self.draw_tiles(snake, canvas);
     }
 
     fn draw_edges(&self, canvas: &mut Canvas<Window>) {
@@ -73,7 +73,7 @@ impl Board {
         }
     }
 
-    fn draw_tiles(&self, canvas: &mut Canvas<Window>)
+    fn draw_tiles(&self, snake: &Snake, canvas: &mut Canvas<Window>)
     {
         for y in 0..20 {
             for x in 0..20 {
@@ -87,7 +87,13 @@ impl Board {
                         self.draw_tile(x, y, canvas);
                     }
                     _ => {
-                        canvas.set_draw_color(Color::RGB(200, 200, 200));
+                        // Snake
+                        if snake.alive() {
+                            canvas.set_draw_color(Color::RGB(200, 200, 200));
+                        }
+                        else {
+                            canvas.set_draw_color(Color::RGB(200, 20, 20));
+                        }
                         self.draw_tile(x, y, canvas);
                     } 
                 }

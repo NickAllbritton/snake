@@ -33,7 +33,6 @@ impl Goal {
     }
 
     pub fn respawn(&mut self, snake: &Snake) {
-        println!("-----------------Respawning------------------");
         let mut rng = rand::rng();
         let mut newx = rng.random_range(0..20);
         let mut newy = rng.random_range(0..20);
@@ -41,8 +40,6 @@ impl Goal {
         while i < snake.body.len() {
             // If a conflict occurs regenerate the position and try again
             if snake.body[i].x == newx && snake.body[i].y == newy {
-                println!("New pos: ({}, {})", newx, newy);
-                println!("Snake: ({}, {})", snake.body[i].x, snake.body[i].y);
                 newx = rng.random_range(0..20);
                 newy = rng.random_range(0..20);
                 i = 0;

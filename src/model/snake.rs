@@ -5,7 +5,7 @@ use crate::view::tile::{Tile, TileType};
 use crate::view::board::Board;
 use crate::model::goal::Goal;
 
-
+#[derive(PartialEq)]
 pub enum Direction {
     Up,
     Down,
@@ -36,10 +36,6 @@ impl Direction {
     }
 
 }
-
-// Do I create an enum Direction and use a speed
-// or do I do what I'm doing and use glam::Vec2.
-// The second way sounds more difficult with little to no return on investment
 
 pub struct Snake {
     pub dir: Direction,
@@ -77,6 +73,17 @@ impl Snake {
 
         return nextx_head >= 0 && nextx_head < 20
             && nexty_head >= 0 && nexty_head < 20;
+    }
+
+    pub fn eating_tail(&self) -> bool {
+        let new_head_pos = (self.body[0].x + self.dir.vec().x, 
+            self.body[0].y + self.dir.vec().y);
+        for tile in self.body.clone() {
+            if new_head_pos.0 == tile.x && new_head_pos.1 == tile.y {
+                return true; // next update will eat tail
+            }
+        }
+        return false; // next update will not eat tail
     }
 
     pub fn try_eat_goal(&mut self, goal: &mut Goal)

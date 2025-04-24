@@ -44,15 +44,13 @@ impl Game {
     }
 
     pub fn update(&mut self) {
-        // TODO: Update according to game logic
-        //
         // If 50 milliseconds has passed since last update, update
         if !self.ft.mark(100) {
             return;
         }
         
         if self.snake.alive() {
-            if self.snake.within_board() {
+            if self.snake.within_board() && !self.snake.eating_tail() {
                 self.snake.try_eat_goal(&mut self.goal);
                 self.snake.move_once(&mut self.board);
             }
@@ -68,17 +66,28 @@ impl Game {
     pub fn handle_key_press(&mut self, key: sdl2::keyboard::Keycode)
     {
         match key {
+            // Check for arrow keys and handle them
+            // If the arrow key that is pressed is opposite of the
+            // current direction then do nothing (otherwise it would kill the snake)
             sdl2::keyboard::Keycode::Up => {
-                self.snake.dir = Direction::Up;
+                if self.snake.dir != Direction::Down {
+                    self.snake.dir = Direction::Up;
+                }
             },
             sdl2::keyboard::Keycode::Down => {
-                self.snake.dir = Direction::Down;
+                if self.snake.dir != Direction::Up {
+                    self.snake.dir = Direction::Down;
+                }
             },
             sdl2::keyboard::Keycode::Left => {
-                self.snake.dir = Direction::Left;
+                if self.snake.dir != Direction::Right {
+                    self.snake.dir = Direction::Left;
+                }
             },
             sdl2::keyboard::Keycode::Right => {
-                self.snake.dir = Direction::Right;
+                if self.snake.dir != Direction::Left {
+                    self.snake.dir = Direction::Right;
+                }
             },
             _ => {/*Do nothing*/}
         }

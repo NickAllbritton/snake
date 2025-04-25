@@ -49,9 +49,9 @@ fn main() -> Result<(), String> {
 
         game.clear_wnd(&mut canvas);
 
-        game.update();
-
         game.draw_wnd(&mut canvas);
+
+        game.update();
     }
     
 

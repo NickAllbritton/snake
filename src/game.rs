@@ -13,7 +13,8 @@ pub struct Game {
     pub board: Board,
     pub goal: Goal,
     pub snake: Snake,
-    pub ft: FrameTimer
+    pub ft: FrameTimer,
+    pub delay: bool
 }
 
 impl Game {
@@ -27,7 +28,8 @@ impl Game {
                                 window_width*9/10, window_height*9/10),
             goal: Goal::new(),
             snake: Snake::new(IVec2 {x: 10, y: 10}),
-            ft: FrameTimer::new()
+            ft: FrameTimer::new(),
+            delay: true
         }
     }
 
@@ -44,7 +46,11 @@ impl Game {
     }
 
     pub fn update(&mut self) {
-        // If 50 milliseconds has passed since last update, update
+         if self.delay {
+            self.delay(1500); // Delay for 1.5 seconds
+            self.delay = false;
+        }
+        // If 100 milliseconds has passed since last update, update
         if !self.ft.mark(100) {
             return;
         }
@@ -90,6 +96,12 @@ impl Game {
                 }
             },
             _ => {/*Do nothing*/}
+        }
+    }
+
+    fn delay(&mut self, milliseconds: u128) {
+        while !self.ft.mark(milliseconds) {
+            // TODO: Display a countdown? Or keep it like this and do nothing
         }
     }
 }

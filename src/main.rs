@@ -1,5 +1,10 @@
-mod view;
-mod model;
+mod game;
+mod time;
+mod board;
+mod tile;
+mod snake;
+mod goal;
+
 
 fn main() -> Result<(), String> {
 
@@ -17,7 +22,7 @@ fn main() -> Result<(), String> {
         .unwrap();
 
     // Create game_state
-    let mut game = model::game::Game::new(wnd_width, wnd_height);
+    let mut game = game::Game::new(wnd_width, wnd_height);
     
     let mut running: bool = true;
     let mut event_queue = sdl_context.event_pump().unwrap();
@@ -32,7 +37,7 @@ fn main() -> Result<(), String> {
                     // If a player presses R end the game and restart
                     if keycode.unwrap() == sdl2::keyboard::Keycode::R {
                         game.snake.die();
-                        game = model::game::Game::new(wnd_width, wnd_height);
+                        game = game::Game::new(wnd_width, wnd_height);
                     } // Otherwise let game handle the keyboard input
                     else {
                         game.handle_key_press(keycode.unwrap());

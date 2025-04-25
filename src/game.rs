@@ -2,10 +2,10 @@ use sdl2::render::Canvas;
 use sdl2::video::Window;
 use glam::IVec2;
 
-use crate::view::board::Board;
-use crate::model::snake::{Snake, Direction};
-use crate::model::goal::Goal;
-use crate::model::time::FrameTimer;
+use crate::board::Board;
+use crate::snake::{Snake, Direction};
+use crate::goal::Goal;
+use crate::time::FrameTimer;
 
 pub struct Game {
     //wnd_width: u32,

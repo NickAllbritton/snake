@@ -1,9 +1,9 @@
 use glam::IVec2;
 use rand::Rng;
 
-use crate::view::tile::{Tile, TileType};
-use crate::view::board::Board;
-use crate::model::goal::Goal;
+use crate::tile::{Tile, TileType};
+use crate::board::Board;
+use crate::goal::Goal;
 
 #[derive(PartialEq)]
 pub enum Direction {

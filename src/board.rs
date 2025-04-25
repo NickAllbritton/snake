@@ -3,9 +3,9 @@ use sdl2::pixels::Color;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
-use crate::view::tile::{Tile, TileType};
-use crate::model::snake::Snake;
-use crate::model::goal::Goal;
+use crate::tile::{Tile, TileType};
+use crate::snake::Snake;
+use crate::goal::Goal;
 
 pub struct Board {
     pub board_area: Rect,

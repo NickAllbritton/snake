@@ -1,7 +1,7 @@
 use rand::Rng;
 
-use crate::view::tile::{Tile, TileType};
-use crate::model::snake::Snake;
+use crate::tile::{Tile, TileType};
+use crate::snake::Snake;
 
 
 pub struct Goal {

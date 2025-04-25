@@ -29,7 +29,14 @@ fn main() -> Result<(), String> {
                     running = false;
                 }
                 sdl2::event::Event::KeyDown {keycode, ..} => {
-                    game.handle_key_press(keycode.unwrap());
+                    // If a player presses R end the game and restart
+                    if keycode.unwrap() == sdl2::keyboard::Keycode::R {
+                        game.snake.die();
+                        game = model::game::Game::new(wnd_width, wnd_height);
+                    } // Otherwise let game handle the keyboard input
+                    else {
+                        game.handle_key_press(keycode.unwrap());
+                    }
                 }
                 _ => {}
             }

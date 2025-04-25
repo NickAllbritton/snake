@@ -5,3 +5,5 @@ This is a very simple game project to practice using rust and give my laptop a c
 ## Current look
 
 ![Current look of the game.](./screenshots/Current.png)
+
+![Current look when dead.](./screenshots/Current2.png)

@@ -7,7 +7,7 @@ use crate::tile::{Tile, TileType};
 use crate::snake::Snake;
 use crate::goal::Goal;
 
-pub const WIDTH: usize = 17;
+pub const WIDTH: usize = 30;
 
 pub struct Board {
     pub board_area: Rect,
@@ -92,7 +92,7 @@ impl Board {
         // Calculate the window coordinates from the board position
         let x: i32 = self.board_area.x() + i32::try_from(posx).unwrap() * (self.board_area.width() as i32)/(WIDTH as i32);
         let y: i32 = self.board_area.y() + i32::try_from(posy).unwrap() * (self.board_area.height() as i32)/(WIDTH as i32);
-        let pad: i32 = 3;
+        let pad: i32 = 2;
         let tile_rect: Rect = Rect::new(x + pad, y + pad, 
             self.board_area.width()/(WIDTH as u32) - (2*pad as u32), self.board_area.height()/(WIDTH as u32) - (2*pad as u32));
         // Assume the correct draw color is set in the canvas

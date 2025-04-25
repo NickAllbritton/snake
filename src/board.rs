@@ -7,11 +7,13 @@ use crate::tile::{Tile, TileType};
 use crate::snake::Snake;
 use crate::goal::Goal;
 
+const WIDTH: usize = 20;
+
 pub struct Board {
     pub board_area: Rect,
     pub goal_color: Color,
     // Array of tiles 17*17
-    tiles: [Tile; 400]
+    tiles: [Tile; WIDTH*WIDTH]
 }
 
 impl Board {
@@ -19,12 +21,12 @@ impl Board {
         Self {
             board_area: Rect::new(posx, posy, width, height),
             goal_color: Color::RGB(150, 140, 200),
-            tiles: [Tile::new(0, 0, TileType::Empty); 400]
+            tiles: [Tile::new(0, 0, TileType::Empty); WIDTH*WIDTH] 
         }
     }
 
     pub fn tile_at(&mut self, posx: usize, posy: usize) -> &mut Tile {
-        return &mut self.tiles[posx + posy * 20];
+        return &mut self.tiles[posx + posy * WIDTH];
     }
 
     pub fn vacate_tile(&mut self, posx: usize, posy: usize) {
@@ -60,9 +62,9 @@ impl Board {
     }
 
     fn draw_tiles(&self, snake: &Snake, canvas: &mut Canvas<Window>) {
-        for y in 0..20 {
+        for y in 0..WIDTH { 
             for x in 0..20 {
-                let cur_tile_type = self.tiles[x + 20 * y].ttype.clone();
+                let cur_tile_type = self.tiles[x + WIDTH * y].ttype.clone();
                 match cur_tile_type {
                     TileType::Empty => {
                         continue;
@@ -88,13 +90,12 @@ impl Board {
 
     fn draw_tile(&self, posx: usize, posy: usize, canvas: &mut Canvas<Window>) {
         // Calculate the window coordinates from the board position
-        let x: i32 = self.board_area.x() + i32::try_from(posx).unwrap() * (self.board_area.width() as i32)/20;
-        let y: i32 = self.board_area.y() + i32::try_from(posy).unwrap() * (self.board_area.height() as i32)/20;
+        let x: i32 = self.board_area.x() + i32::try_from(posx).unwrap() * (self.board_area.width() as i32)/(WIDTH as i32);
+        let y: i32 = self.board_area.y() + i32::try_from(posy).unwrap() * (self.board_area.height() as i32)/(WIDTH as i32);
         let pad: i32 = 3;
         let tile_rect: Rect = Rect::new(x + pad, y + pad, 
-            self.board_area.width()/20 - (2*pad as u32), self.board_area.height()/20 - (2*pad as u32));
+            self.board_area.width()/(WIDTH as u32) - (2*pad as u32), self.board_area.height()/(WIDTH as u32) - (2*pad as u32));
         // Assume the correct draw color is set in the canvas
         let _ = canvas.fill_rect(tile_rect);
     }
-
 }

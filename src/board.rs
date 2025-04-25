@@ -90,7 +90,9 @@ impl Board {
         // Calculate the window coordinates from the board position
         let x: i32 = self.board_area.x() + i32::try_from(posx).unwrap() * (self.board_area.width() as i32)/20;
         let y: i32 = self.board_area.y() + i32::try_from(posy).unwrap() * (self.board_area.height() as i32)/20;
-        let tile_rect: Rect = Rect::new(x + 1, y + 1, self.board_area.width()/20 - 1, self.board_area.height()/20 - 1);
+        let pad: i32 = 3;
+        let tile_rect: Rect = Rect::new(x + pad, y + pad, 
+            self.board_area.width()/20 - (2*pad as u32), self.board_area.height()/20 - (2*pad as u32));
         // Assume the correct draw color is set in the canvas
         let _ = canvas.fill_rect(tile_rect);
     }

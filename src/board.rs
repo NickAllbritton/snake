@@ -1,4 +1,4 @@
-use sdl2::rect::{Rect,Point};
+use sdl2::rect::Rect;
 use sdl2::pixels::Color;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
@@ -46,26 +46,7 @@ impl Board {
         // Set color to be white
         canvas.set_draw_color(Color::RGB(255, 255, 255));
         // Draw lines around the play area of the game
-        // Left side borderline
-        let _ = canvas.draw_line(
-            Point::new(self.board_area.x, self.board_area.y),
-            Point::new(self.board_area.x, self.board_area.y + self.board_area.h)
-        );
-        // Right side borderline
-        let _ = canvas.draw_line(
-            Point::new(self.board_area.x + self.board_area.w, self.board_area.y),
-            Point::new(self.board_area.x + self.board_area.w, self.board_area.y + self.board_area.h)
-        );
-        // Top side borderline
-        let _ = canvas.draw_line(
-            Point::new(self.board_area.x, self.board_area.y),
-            Point::new(self.board_area.x + self.board_area.w, self.board_area.y)
-        );
-        // Bottom side borderline
-        let _ = canvas.draw_line(
-            Point::new(self.board_area.x, self.board_area.y + self.board_area.h),
-            Point::new(self.board_area.x + self.board_area.w, self.board_area.y + self.board_area.h)
-        );
+        let _ = canvas.draw_rect(self.board_area);
     }
 
     fn draw_goal(&mut self, goal: &Goal) {
@@ -109,7 +90,7 @@ impl Board {
         // Calculate the window coordinates from the board position
         let x: i32 = self.board_area.x() + i32::try_from(posx).unwrap() * (self.board_area.width() as i32)/20;
         let y: i32 = self.board_area.y() + i32::try_from(posy).unwrap() * (self.board_area.height() as i32)/20;
-        let tile_rect: Rect = Rect::new(x + 4, y + 4, self.board_area.width()/20 - 4, self.board_area.height()/20 - 4);
+        let tile_rect: Rect = Rect::new(x + 1, y + 1, self.board_area.width()/20 - 1, self.board_area.height()/20 - 1);
         // Assume the correct draw color is set in the canvas
         let _ = canvas.fill_rect(tile_rect);
     }

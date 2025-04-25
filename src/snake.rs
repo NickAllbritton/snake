@@ -2,7 +2,7 @@ use glam::IVec2;
 use rand::Rng;
 
 use crate::tile::{Tile, TileType};
-use crate::board::Board;
+use crate::board::{self, Board};
 use crate::goal::Goal;
 
 #[derive(PartialEq)]
@@ -71,8 +71,8 @@ impl Snake {
         let nextx_head = self.body[0].x + self.dir.vec().x;
         let nexty_head = self.body[0].y + self.dir.vec().y;
 
-        return nextx_head >= 0 && nextx_head < 20
-            && nexty_head >= 0 && nexty_head < 20;
+        return nextx_head >= 0 && nextx_head < board::WIDTH as i32
+            && nexty_head >= 0 && nexty_head < board::WIDTH as i32;
     }
 
     pub fn eating_tail(&self) -> bool {

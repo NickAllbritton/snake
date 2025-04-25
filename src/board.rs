@@ -7,7 +7,7 @@ use crate::tile::{Tile, TileType};
 use crate::snake::Snake;
 use crate::goal::Goal;
 
-const WIDTH: usize = 20;
+pub const WIDTH: usize = 17;
 
 pub struct Board {
     pub board_area: Rect,
@@ -63,7 +63,7 @@ impl Board {
 
     fn draw_tiles(&self, snake: &Snake, canvas: &mut Canvas<Window>) {
         for y in 0..WIDTH { 
-            for x in 0..20 {
+            for x in 0..WIDTH {
                 let cur_tile_type = self.tiles[x + WIDTH * y].ttype.clone();
                 match cur_tile_type {
                     TileType::Empty => {

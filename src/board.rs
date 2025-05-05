@@ -2,6 +2,7 @@ use sdl2::rect::Rect;
 use sdl2::pixels::Color;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
+use rand::Rng;
 
 use crate::tile::{Tile, TileType};
 use crate::snake::Snake;
@@ -70,7 +71,10 @@ impl Board {
                         continue;
                     }
                     TileType::Goal => {
-                        canvas.set_draw_color(self.goal_color);
+                        //canvas.set_draw_color(self.goal_color);
+                        let mut rng = rand::rng();
+                        let goal_color = Color::RGB(rng.random_range(0..255), rng.random_range(0..255), rng.random_range(0..255));
+                        canvas.set_draw_color(goal_color);
                         self.draw_tile(x, y, canvas);
                     }
                     _ => {

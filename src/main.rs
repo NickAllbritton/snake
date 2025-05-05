@@ -21,11 +21,11 @@ fn main() -> Result<(), String> {
         .build()
         .unwrap();
 
-    // Create game_state
+    // Create game state
     let mut game = game::Game::new(wnd_width, wnd_height);
     
     let mut running: bool = true;
-    let mut event_queue = sdl_context.event_pump().unwrap();
+    let mut event_queue = sdl_context.event_pump()?;
 
     while running {
         for event in event_queue.poll_iter() {

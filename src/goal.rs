@@ -1,4 +1,5 @@
 use rand::Rng;
+use sdl2::pixels::Color;
 
 use crate::board;
 use crate::tile::{Tile, TileType};
@@ -6,7 +7,8 @@ use crate::snake::Snake;
 
 
 pub struct Goal {
-    pub tile: Tile
+    pub tile: Tile,
+    pub color: Color
 }
 
 impl Goal {
@@ -29,7 +31,8 @@ impl Goal {
         }
 
         Self {
-            tile: Tile::new(x as i32, y as i32, TileType::Goal)
+            tile: Tile::new(x as i32, y as i32, TileType::Goal),
+            color: Color::RGB(255, 255, 255) // initialize with white
         }
     }
 

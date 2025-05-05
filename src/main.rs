@@ -4,6 +4,7 @@ mod board;
 mod tile;
 mod snake;
 mod goal;
+mod score;
 
 
 fn main() -> Result<(), String> {

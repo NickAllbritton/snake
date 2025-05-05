@@ -5,6 +5,7 @@ use sdl2::video::Window;
 use glam::IVec2;
 
 use crate::board::Board;
+use crate::score::ScoreBoard;
 use crate::snake::{Snake, Direction};
 use crate::goal::Goal;
 use crate::time::FrameTimer;
@@ -13,6 +14,7 @@ pub struct Game {
     //wnd_width: u32,
     //wnd_height: u32,
     pub board: Board,
+    pub score: ScoreBoard,
     pub goal: Goal,
     pub snake: Snake,
     pub ft: FrameTimer,
@@ -28,6 +30,7 @@ impl Game {
             board: Board::new((window_width/20 - 5).try_into().unwrap(),
                                 (window_height/20 - 5).try_into().unwrap(),
                                 window_width*9/10, window_height*9/10),
+            score: ScoreBoard::new(window_width/20 - 5, window_height*190/200),
             goal: Goal::new(),
             snake: Snake::new(IVec2 {x: 10, y: 10}),
             ft: FrameTimer::new(),
@@ -37,6 +40,7 @@ impl Game {
 
     pub fn draw_wnd(&mut self, canvas: &mut Canvas<Window>) {
         self.board.render(&self.goal, &self.snake, canvas);
+        self.score.draw_tallies(canvas);
         canvas.present();
     }
 
@@ -60,7 +64,7 @@ impl Game {
         if self.snake.alive() {
             // Move the snake if possible
             if self.snake.within_board() && !self.snake.eating_tail() {
-                self.snake.try_eat_goal(&mut self.goal);
+                self.snake.try_eat_goal(&mut self.score, &mut self.goal);
                 self.snake.move_once(&mut self.board);
             }
             else {
@@ -68,7 +72,7 @@ impl Game {
             }
             // Change the goal color
             let mut rng = rand::rng();
-            self.board.goal_color = Color::RGB(rng.random_range(0..255), rng.random_range(0..255), rng.random_range(0..255));
+            self.goal.color = Color::RGB(rng.random_range(0..255), rng.random_range(0..255), rng.random_range(0..255));
         }
         else {
             // TODO: Show final score or something

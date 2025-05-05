@@ -2,7 +2,6 @@ use sdl2::rect::Rect;
 use sdl2::pixels::Color;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
-use rand::Rng;
 
 use crate::tile::{Tile, TileType};
 use crate::snake::Snake;
@@ -12,7 +11,6 @@ pub const WIDTH: usize = 30;
 
 pub struct Board {
     pub board_area: Rect,
-    pub goal_color: Color,
     tiles: [Tile; WIDTH*WIDTH]
 }
 
@@ -20,7 +18,6 @@ impl Board {
     pub fn new(posx: i32, posy: i32, width: u32, height: u32) -> Self {
         Self {
             board_area: Rect::new(posx, posy, width, height),
-            goal_color: Color::RGB(150, 140, 200),
             tiles: [Tile::new(0, 0, TileType::Empty); WIDTH*WIDTH] 
         }
     }
@@ -41,7 +38,7 @@ impl Board {
         self.draw_edges(canvas);
         self.draw_goal(goal);
         self.draw_snake(snake);
-        self.draw_tiles(snake, canvas);
+        self.draw_tiles(snake, goal, canvas);
     }
 
     fn draw_edges(&self, canvas: &mut Canvas<Window>) {
@@ -61,7 +58,7 @@ impl Board {
         }
     }
 
-    fn draw_tiles(&self, snake: &Snake, canvas: &mut Canvas<Window>) {
+    fn draw_tiles(&self, snake: &Snake, goal: &Goal, canvas: &mut Canvas<Window>) {
         for y in 0..WIDTH { 
             for x in 0..WIDTH {
                 let cur_tile_type = self.tiles[x + WIDTH * y].ttype.clone();
@@ -70,7 +67,7 @@ impl Board {
                         continue;
                     }
                     TileType::Goal => {
-                        canvas.set_draw_color(self.goal_color);
+                        canvas.set_draw_color(goal.color);
                         self.draw_tile(x, y, canvas);
                     }
                     _ => {

@@ -4,6 +4,7 @@ use rand::Rng;
 use crate::tile::{Tile, TileType};
 use crate::board::{self, Board};
 use crate::goal::Goal;
+use crate::score::ScoreBoard;
 
 #[derive(PartialEq)]
 pub enum Direction {
@@ -86,13 +87,14 @@ impl Snake {
         return false; // next update will not eat tail
     }
 
-    pub fn try_eat_goal(&mut self, goal: &mut Goal)
+    pub fn try_eat_goal(&mut self, score: &mut ScoreBoard, goal: &mut Goal)
     {
         let nextx_head = self.body[0].x + self.dir.vec().x;
         let nexty_head = self.body[0].y + self.dir.vec().y;
 
         if goal.tile.x == nextx_head && goal.tile.y == nexty_head {
             self.grow = true;
+            score.collect_goal(goal.color);
             goal.respawn(&self);
         }
     }

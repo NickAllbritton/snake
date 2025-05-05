@@ -1,3 +1,5 @@
+use rand::Rng;
+use sdl2::pixels::Color;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 use glam::IVec2;
@@ -56,6 +58,7 @@ impl Game {
         }
         
         if self.snake.alive() {
+            // Move the snake if possible
             if self.snake.within_board() && !self.snake.eating_tail() {
                 self.snake.try_eat_goal(&mut self.goal);
                 self.snake.move_once(&mut self.board);
@@ -63,6 +66,9 @@ impl Game {
             else {
                 self.snake.die();
             }
+            // Change the goal color
+            let mut rng = rand::rng();
+            self.board.goal_color = Color::RGB(rng.random_range(0..255), rng.random_range(0..255), rng.random_range(0..255));
         }
         else {
             // TODO: Show final score or something
@@ -72,7 +78,7 @@ impl Game {
     pub fn handle_key_press(&mut self, key: sdl2::keyboard::Keycode)
     {
         match key {
-            // Check for arrow keys and handle them
+            // Check for arrow keys and handle them.
             // If the arrow key that is pressed is opposite of the
             // current direction then do nothing (otherwise it would kill the snake)
             sdl2::keyboard::Keycode::Up => {

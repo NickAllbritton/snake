@@ -13,7 +13,6 @@ pub const WIDTH: usize = 30;
 pub struct Board {
     pub board_area: Rect,
     pub goal_color: Color,
-    // Array of tiles 17*17
     tiles: [Tile; WIDTH*WIDTH]
 }
 
@@ -71,10 +70,7 @@ impl Board {
                         continue;
                     }
                     TileType::Goal => {
-                        //canvas.set_draw_color(self.goal_color);
-                        let mut rng = rand::rng();
-                        let goal_color = Color::RGB(rng.random_range(0..255), rng.random_range(0..255), rng.random_range(0..255));
-                        canvas.set_draw_color(goal_color);
+                        canvas.set_draw_color(self.goal_color);
                         self.draw_tile(x, y, canvas);
                     }
                     _ => {

@@ -1,5 +1,3 @@
-use rand::Rng;
-use sdl2::pixels::Color;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 use glam::IVec2;
@@ -71,8 +69,7 @@ impl Game {
                 self.snake.die();
             }
             // Change the goal color
-            let mut rng = rand::rng();
-            self.goal.color = Color::RGB(rng.random_range(0..255), rng.random_range(0..255), rng.random_range(0..255));
+            self.goal.new_color();
         }
         else {
             // TODO: Show final score or something

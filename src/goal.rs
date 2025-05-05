@@ -55,4 +55,9 @@ impl Goal {
         self.tile.y = newy as i32;
     }
 
+    pub fn new_color(&mut self) {
+        let mut rng = rand::rng();
+        self.color = Color::RGB(rng.random_range(50..=255), rng.random_range(50..=255), rng.random_range(50..=255));
+    }
+
 }

@@ -18,7 +18,7 @@ impl ScoreBoard {
             goals_collected: Vec::new(),
             draw_pos: (posx, posy),
             tally_width: 3u32,
-            tally_height: 25u32,
+            tally_height: 35u32,
             padding_width: 10u32
         }
     }

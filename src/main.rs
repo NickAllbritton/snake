@@ -39,7 +39,11 @@ fn main() -> Result<(), String> {
                     if keycode.unwrap() == sdl2::keyboard::Keycode::R {
                         game.snake.die();
                         game = game::Game::new(wnd_width, wnd_height);
-                    } // Otherwise let game handle the keyboard input
+                    }
+                    else if keycode.unwrap() == sdl2::keyboard::Keycode::Q {
+                        running = false;
+                    } 
+                    // Otherwise let game handle the keyboard input
                     else {
                         game.handle_key_press(keycode.unwrap());
                     }

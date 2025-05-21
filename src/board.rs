@@ -70,16 +70,24 @@ impl Board {
                         canvas.set_draw_color(goal.color);
                         self.draw_tile(x, y, canvas);
                     }
-                    _ => {
-                        // Snake
+                    TileType::SnakeHead => {
                         if snake.alive() {
-                            canvas.set_draw_color(Color::RGB(200, 200, 200));
+                            canvas.set_draw_color(Color::RGB(110, 110, 110));
                         }
                         else {
                             canvas.set_draw_color(Color::RGB(200, 20, 20));
                         }
                         self.draw_tile(x, y, canvas);
                     } 
+                    TileType::SnakeBody => {
+                        if snake.alive() {
+                            canvas.set_draw_color(Color::RGB(120, 150, 120));
+                        }
+                        else {
+                            canvas.set_draw_color(Color::RGB(200, 20, 20));
+                        }
+                        self.draw_tile(x, y, canvas);
+                    }
                 }
             }
         }

@@ -35,17 +35,24 @@ fn main() -> Result<(), String> {
                     running = false;
                 }
                 sdl2::event::Event::KeyDown {keycode, ..} => {
-                    // If a player presses R end the game and restart
-                    if keycode.unwrap() == sdl2::keyboard::Keycode::R {
-                        game.snake.die();
-                        game = game::Game::new(wnd_width, wnd_height);
-                    }
-                    else if keycode.unwrap() == sdl2::keyboard::Keycode::Q {
-                        running = false;
-                    } 
-                    // Otherwise let game handle the keyboard input
-                    else {
-                        game.handle_key_press(keycode.unwrap());
+                    match keycode.unwrap() {
+                        // If a player presses R, kill the snake and create a new game
+                        sdl2::keyboard::Keycode::R => {
+                            game.snake.die();
+                            game = game::Game::new(wnd_width, wnd_height);
+                        }
+                        // If a player presses Q, quit the program
+                        sdl2::keyboard::Keycode::Q => {
+                            running = false;
+                        }
+                        // If a player presses P, pause the game
+                        sdl2::keyboard::Keycode::P => {
+                            game.toggle_pause();
+                        }
+                        // Otherwise let game handle the keyboard input
+                        _ => {
+                            game.handle_key_press(keycode.unwrap());
+                        }
                     }
                 }
                 _ => {}

@@ -16,7 +16,8 @@ pub struct Game {
     pub goal: Goal,
     pub snake: Snake,
     pub ft: FrameTimer,
-    pub delay: bool
+    pub delay: bool,
+    pub pause: bool
 }
 
 impl Game {
@@ -32,7 +33,8 @@ impl Game {
             goal: Goal::new(),
             snake: Snake::new(IVec2 {x: 10, y: 10}),
             ft: FrameTimer::new(),
-            delay: true
+            delay: true,
+            pause: false
         }
     }
 
@@ -49,8 +51,17 @@ impl Game {
         canvas.clear(); // Paint the background color
     }
 
+    pub fn toggle_pause(&mut self) {
+        self.pause = !self.pause;
+    }
+
     pub fn update(&mut self) {
-         if self.delay {
+        // If the game is paused, do not update the game
+        if self.pause {
+            return;
+        }
+        // If the game delay variable is set, delay the game-play 
+        if self.delay {
             self.delay(1500); // Delay for 1.5 seconds
             self.delay = false;
         }
@@ -58,7 +69,7 @@ impl Game {
         if !self.ft.mark(100) {
             return;
         }
-        
+        // Otherwise, game logic:
         if self.snake.alive() {
             // Move the snake if possible
             if self.snake.within_board() && !self.snake.eating_tail() {
@@ -78,8 +89,12 @@ impl Game {
 
     pub fn handle_key_press(&mut self, key: sdl2::keyboard::Keycode)
     {
+        // Do not handle key presses for game logic if the game is paused
+        if self.pause {
+            return;
+        }
+        // Otherwise, process arrow-key presses
         match key {
-            // Check for arrow keys and handle them.
             // If the arrow key that is pressed is opposite of the
             // current direction then do nothing (otherwise it would kill the snake)
             sdl2::keyboard::Keycode::Up => {

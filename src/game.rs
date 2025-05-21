@@ -29,7 +29,7 @@ impl Game {
             board: Board::new((window_width/20 - 5).try_into().unwrap(),
                                 (window_height/20 - 5).try_into().unwrap(),
                                 window_width*9/10, window_height*9/10),
-            score: ScoreBoard::new(window_width/20 - 5, window_height*190/200),
+            score: ScoreBoard::new(window_width/20 - 5, window_height*191/200),
             goal: Goal::new(),
             snake: Snake::new(IVec2 {x: 10, y: 10}),
             ft: FrameTimer::new(),

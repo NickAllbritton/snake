@@ -94,7 +94,7 @@ impl Snake {
 
         if goal.tile.x == nextx_head && goal.tile.y == nexty_head {
             self.grow = true;
-            score.collect_goal(goal.color);
+            score.collect_goal();
             goal.respawn(&self);
         }
     }

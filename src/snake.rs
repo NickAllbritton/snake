@@ -77,11 +77,14 @@ impl Snake {
     }
 
     pub fn eating_tail(&self) -> bool {
+        // Calculate the next head position
         let new_head_pos = (self.body[0].x + self.dir.vec().x, 
             self.body[0].y + self.dir.vec().y);
-        for tile in self.body.clone() {
-            if new_head_pos.0 == tile.x && new_head_pos.1 == tile.y {
-                return true; // next update will eat tail
+        // Check if the head is going to eat any of the snake tiles (except the head the the one
+        // after, because they aren't possible)
+        for tile in &self.body[2..] {
+            if new_head_pos == (tile.x, tile.y) {
+                return true;
             }
         }
         return false; // next update will not eat tail

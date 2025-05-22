@@ -93,30 +93,36 @@ impl Game {
         if self.pause {
             return;
         }
-        // Otherwise, process arrow-key presses
+        // Otherwise, process arrow-key presses -->
+        // Calculate the current direction. Using a calculation 
+        // based on the first two tiles of the snake fixes several
+        // bugs where you can accidentally go backwards and eat yourself
+        let head_tile = self.snake.body[0].clone();
+        let first_body_tile = self.snake.body[1].clone();
+        let current_direction = IVec2::new(head_tile.x - first_body_tile.x, head_tile.y - first_body_tile.y);
         match key {
             // If the arrow key that is pressed is opposite of the
             // current direction then do nothing (otherwise it would kill the snake)
             sdl2::keyboard::Keycode::Up => {
-                if self.snake.dir != Direction::Down {
+                if current_direction != Direction::Down.vec() {
                     self.snake.dir = Direction::Up;
                 }
-            },
+            }
             sdl2::keyboard::Keycode::Down => {
-                if self.snake.dir != Direction::Up {
+                if current_direction != Direction::Up.vec() {
                     self.snake.dir = Direction::Down;
                 }
-            },
+            }
             sdl2::keyboard::Keycode::Left => {
-                if self.snake.dir != Direction::Right {
+                if current_direction != Direction::Right.vec() {
                     self.snake.dir = Direction::Left;
                 }
-            },
+            }
             sdl2::keyboard::Keycode::Right => {
-                if self.snake.dir != Direction::Left {
+                if current_direction != Direction::Left.vec() {
                     self.snake.dir = Direction::Right;
                 }
-            },
+            }
             _ => {/*Do nothing*/}
         }
     }

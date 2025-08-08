@@ -54,6 +54,7 @@ impl Board {
 
     fn draw_snake(&mut self, snake: &Snake) {
         for tile in snake.body.clone() {
+            // Copy the tile of each snake tile into its location on the board
             *self.tile_at(tile.x as usize, tile.y as usize) = tile.clone(); 
         }
     }
@@ -81,7 +82,7 @@ impl Board {
                     } 
                     TileType::SnakeBody => {
                         if snake.alive() {
-                            canvas.set_draw_color(Color::RGB(120, 150, 120));
+                            canvas.set_draw_color(Color::RGB(120, 90, 110));
                         }
                         else {
                             canvas.set_draw_color(Color::RGB(200, 20, 20));

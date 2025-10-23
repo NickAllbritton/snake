@@ -90,7 +90,7 @@ impl Snake {
         return false; // next update will not eat tail
     }
 
-    pub fn try_eat_goal(&mut self, score: &mut ScoreBoard, goal: &mut Goal)
+    pub fn try_eat_goal(&mut self, score: &mut ScoreBoard, goal: &mut Goal, delay: &mut u128)
     {
         let nextx_head = self.body[0].x + self.dir.vec().x;
         let nexty_head = self.body[0].y + self.dir.vec().y;
@@ -98,6 +98,11 @@ impl Snake {
         if goal.tile.x == nextx_head && goal.tile.y == nexty_head {
             self.grow = true;
             score.collect_goal();
+            if score.goals_collected % 10 == 0 {
+                let delay_float: f64 = delay.clone() as f64;
+                let delay_decrease: f64 =  delay_float / 10f64;
+                *delay = (delay_float - delay_decrease).round() as u128;
+            }
             goal.respawn(&self);
         }
     }

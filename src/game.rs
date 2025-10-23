@@ -17,7 +17,8 @@ pub struct Game {
     pub snake: Snake,
     pub ft: FrameTimer,
     pub delay: bool,
-    pub pause: bool
+    pub pause: bool,
+    pub millis_per_move: u128
 }
 
 impl Game {
@@ -34,7 +35,8 @@ impl Game {
             snake: Snake::new(IVec2 {x: 10, y: 10}),
             ft: FrameTimer::new(),
             delay: true,
-            pause: false
+            pause: false,
+            millis_per_move: 90u128
         }
     }
 
@@ -66,14 +68,14 @@ impl Game {
             self.delay = false;
         }
         // If 100 milliseconds has passed since last update, update
-        if !self.ft.mark(100) {
+        if !self.ft.mark(self.millis_per_move) {
             return;
         }
         // Otherwise, game logic:
         if self.snake.alive() {
             // Move the snake if possible
             if self.snake.within_board() && !self.snake.eating_tail() {
-                self.snake.try_eat_goal(&mut self.score, &mut self.goal);
+                self.snake.try_eat_goal(&mut self.score, &mut self.goal, &mut self.millis_per_move);
                 self.snake.move_once(&mut self.board);
             }
             else {

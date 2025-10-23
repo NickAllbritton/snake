@@ -98,11 +98,9 @@ impl Snake {
         if goal.tile.x == nextx_head && goal.tile.y == nexty_head {
             self.grow = true;
             score.collect_goal();
-            if score.goals_collected % 10 == 0 {
-                let delay_float: f64 = delay.clone() as f64;
-                let delay_decrease: f64 =  delay_float / 10f64;
-                *delay = (delay_float - delay_decrease).round() as u128;
-            }
+            let delay_float: f64 = delay.clone() as f64;
+            let delay_decrease: f64 =  delay_float / 100f64;
+            *delay = (delay_float - delay_decrease).round() as u128;
             goal.respawn(&self);
         }
     }

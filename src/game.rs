@@ -2,6 +2,8 @@ use sdl2::render::Canvas;
 use sdl2::video::Window;
 use glam::IVec2;
 
+use std::error::Error;
+
 use crate::board::Board;
 use crate::score::ScoreBoard;
 use crate::snake::{Snake, Direction};
@@ -23,12 +25,12 @@ pub struct Game {
 
 impl Game {
     
-    pub fn new(window_width: u32, window_height: u32) -> Self {
-        Self {
+    pub fn new(window_width: u32, window_height: u32) -> Result<Self, Box<dyn Error>> {
+        Ok(Self {
             //wnd_width: window_width,
             //wnd_height: window_height,
-            board: Board::new((window_width/20 - 5).try_into().unwrap(),
-                                (window_height/20 - 5).try_into().unwrap(),
+            board: Board::new((window_width/20 - 5).try_into()?,
+                                (window_height/20 - 5).try_into()?,
                                 window_width*9/10, window_height*9/10),
             score: ScoreBoard::new(window_width, window_height),
             goal: Goal::new(),
@@ -37,13 +39,15 @@ impl Game {
             delay: true,
             pause: false,
             millis_per_move: 90u128
-        }
+        })
     }
 
-    pub fn draw_wnd(&mut self, canvas: &mut Canvas<Window>) {
-        self.board.render(&self.goal, &self.snake, canvas);
+    pub fn draw_wnd(&mut self, canvas: &mut Canvas<Window>) -> Result<(), Box<dyn Error>> {
+        self.board.render(&self.goal, &self.snake, canvas)?;
         self.score.draw_tallies(canvas);
         canvas.present();
+
+        Ok(())
     }
 
     pub fn clear_wnd(&self, canvas: &mut Canvas<Window>) {

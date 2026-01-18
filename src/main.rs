@@ -6,24 +6,22 @@ mod snake;
 mod goal;
 mod score;
 
+use std::error::Error;
 
-fn main() -> Result<(), String> {
+//  TODO: Learn what traits are: for now take this return type as any type of error
+fn main() -> Result<(), Box<dyn Error>> {
 
     let wnd_width: u32 = 1000;
     let wnd_height: u32 = 1000;
 
     let sdl_context = sdl2::init()?;
     let vid_subsystem = sdl_context.video()?;
-    let wnd = vid_subsystem.window("snake", wnd_width, wnd_height)
-        .build()
-        .unwrap();
+    let wnd = vid_subsystem.window("snake", wnd_width, wnd_height).build()?;
 
-    let mut canvas = wnd.into_canvas()
-        .build()
-        .unwrap();
+    let mut canvas = wnd.into_canvas().build()?;
 
     // Create game state
-    let mut game = game::Game::new(wnd_width, wnd_height);
+    let mut game = game::Game::new(wnd_width, wnd_height)?;
     
     let mut running: bool = true;
     let mut event_queue = sdl_context.event_pump()?;
@@ -35,11 +33,12 @@ fn main() -> Result<(), String> {
                     running = false;
                 }
                 sdl2::event::Event::KeyDown {keycode, ..} => {
-                    match keycode.unwrap() {
+                    let key = keycode.ok_or(sdl2::Error::UnsupportedError)?;
+                    match key {
                         // If a player presses R, kill the snake and create a new game
                         sdl2::keyboard::Keycode::R => {
                             game.snake.die();
-                            game = game::Game::new(wnd_width, wnd_height);
+                            game = game::Game::new(wnd_width, wnd_height)?;
                         }
                         // If a player presses Q, quit the program
                         sdl2::keyboard::Keycode::Q => {
@@ -51,7 +50,7 @@ fn main() -> Result<(), String> {
                         }
                         // Otherwise let game handle the keyboard input
                         _ => {
-                            game.handle_key_press(keycode.unwrap());
+                            game.handle_key_press(key);
                         }
                     }
                 }
@@ -61,7 +60,7 @@ fn main() -> Result<(), String> {
 
         game.clear_wnd(&mut canvas);
 
-        game.draw_wnd(&mut canvas);
+        game.draw_wnd(&mut canvas)?;
 
         game.update();
     }

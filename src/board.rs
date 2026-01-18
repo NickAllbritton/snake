@@ -3,6 +3,8 @@ use sdl2::pixels::Color;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
+use std::error::Error;
+
 use crate::tile::{Tile, TileType};
 use crate::snake::Snake;
 use crate::goal::Goal;
@@ -34,11 +36,13 @@ impl Board {
         let temp_tiles: 
     }*/
 
-    pub fn render(&mut self, goal: &Goal, snake: &Snake, canvas: &mut Canvas<Window>) {
+    pub fn render(&mut self, goal: &Goal, snake: &Snake, canvas: &mut Canvas<Window>) -> Result<(), Box<dyn Error>> {
         self.draw_edges(canvas);
         self.draw_goal(goal);
         self.draw_snake(snake);
-        self.draw_tiles(snake, goal, canvas);
+        self.draw_tiles(snake, goal, canvas)?;
+
+        Ok(())
     }
 
     fn draw_edges(&self, canvas: &mut Canvas<Window>) {
@@ -59,7 +63,7 @@ impl Board {
         }
     }
 
-    fn draw_tiles(&self, snake: &Snake, goal: &Goal, canvas: &mut Canvas<Window>) {
+    fn draw_tiles(&self, snake: &Snake, goal: &Goal, canvas: &mut Canvas<Window>) -> Result<(), Box<dyn Error>> {
         for y in 0..WIDTH { 
             for x in 0..WIDTH {
                 let cur_tile_type = self.tiles[x + WIDTH * y].ttype.clone();
@@ -69,7 +73,7 @@ impl Board {
                     }
                     TileType::Goal => {
                         canvas.set_draw_color(goal.color);
-                        self.draw_tile(x, y, canvas);
+                        self.draw_tile(x, y, canvas)?;
                     }
                     TileType::SnakeHead => {
                         if snake.alive() {
@@ -78,7 +82,7 @@ impl Board {
                         else {
                             canvas.set_draw_color(Color::RGB(200, 20, 20));
                         }
-                        self.draw_tile(x, y, canvas);
+                        self.draw_tile(x, y, canvas)?;
                     } 
                     TileType::SnakeBody => {
                         if snake.alive() {
@@ -87,21 +91,24 @@ impl Board {
                         else {
                             canvas.set_draw_color(Color::RGB(200, 20, 20));
                         }
-                        self.draw_tile(x, y, canvas);
+                        self.draw_tile(x, y, canvas)?;
                     }
                 }
             }
         }
+        Ok(())
     }
 
-    fn draw_tile(&self, posx: usize, posy: usize, canvas: &mut Canvas<Window>) {
+    fn draw_tile(&self, posx: usize, posy: usize, canvas: &mut Canvas<Window>) -> Result<(), Box<dyn Error>> {
         // Calculate the window coordinates from the board position
-        let x: i32 = self.board_area.x() + i32::try_from(posx).unwrap() * (self.board_area.width() as i32)/(WIDTH as i32);
-        let y: i32 = self.board_area.y() + i32::try_from(posy).unwrap() * (self.board_area.height() as i32)/(WIDTH as i32);
+        let x: i32 = self.board_area.x() + i32::try_from(posx)? * (self.board_area.width() as i32)/(WIDTH as i32);
+        let y: i32 = self.board_area.y() + i32::try_from(posy)? * (self.board_area.height() as i32)/(WIDTH as i32);
         let pad: i32 = 2;
         let tile_rect: Rect = Rect::new(x + pad, y + pad, 
             self.board_area.width()/(WIDTH as u32) - (2*pad as u32), self.board_area.height()/(WIDTH as u32) - (2*pad as u32));
         // Assume the correct draw color is set in the canvas
         let _ = canvas.fill_rect(tile_rect);
+
+        Ok(())
     }
 }

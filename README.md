@@ -10,6 +10,6 @@ a goal is collected the snake speeds up by 1%.
 
 ## Current look
 
-![Current look of the game.](./screenshots/Current.png)
+![Current look of the game while running.](./screenshots/Current.png)
 
 ![Current look when dead.](./screenshots/Current2.png)

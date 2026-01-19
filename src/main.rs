@@ -11,14 +11,18 @@ use std::error::Error;
 //  TODO: Learn what traits are: for now take this return type as any type of error
 fn main() -> Result<(), Box<dyn Error>> {
 
-    let wnd_width: u32 = 1000;
-    let wnd_height: u32 = 1000;
+    // Enable backtrace for debugging
+    unsafe { std::env::set_var("RUST_BACKTRACE", "1"); }
 
-    let sdl_context = sdl2::init()?;
+
+    let wnd_width: u32 = 800;
+    let wnd_height: u32 = 800;
+
+    let sdl_context = sdl3::init()?;
     let vid_subsystem = sdl_context.video()?;
     let wnd = vid_subsystem.window("snake", wnd_width, wnd_height).build()?;
 
-    let mut canvas = wnd.into_canvas().build()?;
+    let mut canvas = wnd.into_canvas();
 
     // Create game state
     let mut game = game::Game::new(wnd_width, wnd_height)?;
@@ -29,23 +33,23 @@ fn main() -> Result<(), Box<dyn Error>> {
     while running {
         for event in event_queue.poll_iter() {
             match event {
-                sdl2::event::Event::Quit {..} => {
+                sdl3::event::Event::Quit {..} => {
                     running = false;
                 }
-                sdl2::event::Event::KeyDown {keycode, ..} => {
-                    let key = keycode.ok_or(sdl2::Error::UnsupportedError)?;
+                sdl3::event::Event::KeyDown {keycode, ..} => {
+                    let key = keycode.expect("Keycode invalid for key down event!");
                     match key {
                         // If a player presses R, kill the snake and create a new game
-                        sdl2::keyboard::Keycode::R => {
+                        sdl3::keyboard::Keycode::R => {
                             game.snake.die();
                             game = game::Game::new(wnd_width, wnd_height)?;
                         }
                         // If a player presses Q, quit the program
-                        sdl2::keyboard::Keycode::Q => {
+                        sdl3::keyboard::Keycode::Q => {
                             running = false;
                         }
                         // If a player presses P, pause the game
-                        sdl2::keyboard::Keycode::P => {
+                        sdl3::keyboard::Keycode::P => {
                             game.toggle_pause();
                         }
                         // Otherwise let game handle the keyboard input

@@ -1,5 +1,5 @@
 use rand::Rng;
-use sdl2::pixels::Color;
+use sdl3::pixels::Color;
 
 use crate::board;
 use crate::tile::{Tile, TileType};

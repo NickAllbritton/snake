@@ -1,7 +1,7 @@
-use sdl2::rect::Rect;
-use sdl2::pixels::Color;
-use sdl2::render::Canvas;
-use sdl2::video::Window;
+use sdl3::rect::Rect;
+use sdl3::pixels::Color;
+use sdl3::render::Canvas;
+use sdl3::video::Window;
 
 pub struct ScoreBoard {
     pub goals_collected: u32,

@@ -1,5 +1,5 @@
-use sdl2::render::Canvas;
-use sdl2::video::Window;
+use sdl3::render::Canvas;
+use sdl3::video::Window;
 use glam::IVec2;
 
 use std::error::Error;
@@ -53,7 +53,7 @@ impl Game {
     pub fn clear_wnd(&self, canvas: &mut Canvas<Window>) {
         
         // Black background color
-        canvas.set_draw_color(sdl2::pixels::Color::RGB(0, 0, 0));
+        canvas.set_draw_color(sdl3::pixels::Color::RGB(0, 0, 0));
         canvas.clear(); // Paint the background color
     }
 
@@ -93,7 +93,7 @@ impl Game {
         }
     }
 
-    pub fn handle_key_press(&mut self, key: sdl2::keyboard::Keycode)
+    pub fn handle_key_press(&mut self, key: sdl3::keyboard::Keycode)
     {
         // Do not handle key presses for game logic if the game is paused
         if self.pause {
@@ -109,22 +109,22 @@ impl Game {
         match key {
             // If the arrow key that is pressed is opposite of the
             // current direction then do nothing (otherwise it would kill the snake)
-            sdl2::keyboard::Keycode::Up => {
+            sdl3::keyboard::Keycode::Up => {
                 if current_direction != Direction::Down.vec() {
                     self.snake.dir = Direction::Up;
                 }
             }
-            sdl2::keyboard::Keycode::Down => {
+            sdl3::keyboard::Keycode::Down => {
                 if current_direction != Direction::Up.vec() {
                     self.snake.dir = Direction::Down;
                 }
             }
-            sdl2::keyboard::Keycode::Left => {
+            sdl3::keyboard::Keycode::Left => {
                 if current_direction != Direction::Right.vec() {
                     self.snake.dir = Direction::Left;
                 }
             }
-            sdl2::keyboard::Keycode::Right => {
+            sdl3::keyboard::Keycode::Right => {
                 if current_direction != Direction::Left.vec() {
                     self.snake.dir = Direction::Right;
                 }

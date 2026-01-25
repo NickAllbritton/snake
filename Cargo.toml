@@ -1,7 +1,12 @@
 [package]
 name = "snake"
 version = "0.3.0"
-edition = "2024"
+authors = ["Nick <nickallbritton@proton.me>"]
+edition = "2026"
+description = "Simple snake game powered by SDL3!"
+repository = "https://github.com/NickAllbritton/snake"
+license = "GPL-3.0-or-later"
+readme = "README.md"
 
 [dependencies]
 glam = "0.30.2"

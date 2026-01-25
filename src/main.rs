@@ -15,12 +15,14 @@ fn main() -> Result<(), Box<dyn Error>> {
     unsafe { std::env::set_var("RUST_BACKTRACE", "1"); }
 
 
+    // Default window dimensions
     let wnd_width: u32 = 800;
     let wnd_height: u32 = 800;
 
     let sdl_context = sdl3::init()?;
     let vid_subsystem = sdl_context.video()?;
-    let wnd = vid_subsystem.window("snake", wnd_width, wnd_height).build()?;
+    let wnd = vid_subsystem.window("snake", wnd_width, wnd_height)
+        .resizable().build()?;
 
     let mut canvas = wnd.into_canvas();
 

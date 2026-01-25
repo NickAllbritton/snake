@@ -13,3 +13,9 @@ a goal is collected the snake speeds up by 1%.
 ![Current look of the game while running.](./screenshots/Current.png)
 
 ![Current look when dead.](./screenshots/Current2.png)
+
+
+## Resizable 
+Resizable by user, window manager, or operating system to any reasonable degree as seen in the screenshot below.
+
+![Several terminals open in one workspace with snake open, as well. Format does not break. Game is still playable.](./screenshots/Current3.png)

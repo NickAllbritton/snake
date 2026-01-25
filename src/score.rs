@@ -25,11 +25,11 @@ impl ScoreBoard {
         // Length of tallies should be less than 5% of side length.
         let tally_height: f32 = smallest_side*3f32/100f32;
         // Width of the tallies should be much smaller
-        let tally_width: f32 = smallest_side*1f32/300f32;
+        let tally_width: f32 = smallest_side*1f32/350f32;
         // Padding between edge of board and nearest tallies (not between tallies)
-        let padding_edge: f32 = smallest_side*3f32/200f32;
+        let padding_edge: f32 = smallest_side*3f32/400f32;
         // Score per side (before tallies wrap to next side of board border
-        let score_per_side: u32 = 29;
+        let score_per_side: u32 = 49;
         // Padding between tallies (algebra comes from geometry where there are n-1 paddings for
         // ntallies per side with type chaos preventing code readibility... refactor?
         // p - padding between tallies (padding_between)

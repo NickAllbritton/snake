@@ -1,10 +1,10 @@
 [package]
 name = "snick"
-version = "0.3.0"
+version = "0.3.1"
 authors = ["Nick <nickallbritton@proton.me>"]
 edition = "2024"
 description = "Simple snake game powered by SDL3!"
-repository = "https://github.com/NickAllbritton/snake"
+repository = "https://github.com/NickAllbritton/snick"
 license = "GPL-3.0-or-later"
 readme = "README.md"
 categories = ["games"]

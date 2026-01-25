@@ -3,6 +3,8 @@ use sdl3::pixels::Color;
 use sdl3::render::Canvas;
 use sdl3::video::Window;
 
+use std::error::Error;
+
 pub struct ScoreBoard {
     pub goals_collected: u32,
     draw_pos: (i32, i32),
@@ -12,24 +14,44 @@ pub struct ScoreBoard {
     tally_width: i32,
     tally_height: i32,
     padding_width: i32,
+    tallies_per_side: u32
 }
 
 impl ScoreBoard {
 
-    pub fn new(wnd_width: u32, wnd_height: u32) -> Self {
-        // borders padding TEST
-        let padding: i32 = 10i32;
-        let draw_pos = ((wnd_width as i32 - padding)/20 - 6, (wnd_height as i32 - padding)*772/800);
-        Self {
+    pub fn new(wnd_w: u32, wnd_h: u32, side: u32) -> Result<Self, Box<dyn Error>> {
+        // Smallest side of Window
+        let smallest_side: u32 = std::cmp::min(wnd_w, wnd_h);
+        // Length of tallies should be less than 5% of side length.
+        let tally_heght: i32 = (smallest_side*3/100).try_into()?;
+        // Width of the tallies should be much smaller
+        let tally_width: i32 = (smallest_side*1/200).try_into()?;
+        // Padding between edge of board and nearest tallies (not between tallies)
+        let padding_edge: i32 = (smallest_side*3/200).try_into()?;
+        // Score per side (before tallies wrap to next side of board border
+        let score_per_side: u32 = 5;
+        // Padding between tallies (algebra comes from geometry where there are n-1 paddings for
+        // ntallies per side with type chaos preventing code readibility... refactor?
+        // p - padding between tallies (padding_between)
+        // n - number of tallies (score_per_side)
+        // s - side length (side)
+        // w - width of tally (tally_width)
+        // p = (s - nw)/(n - 1)
+        let total_tally_width: u32 = ((score_per_side as i32)*tally_width).try_into()?;
+        let padding_between: i32 = (((side-total_tally_width) as f32)/((score_per_side-1) as f32)).trunc() as i32; 
+        // Start drawing in bottom left corner of board plus padding
+        let draw_pos = (((wnd_w-side)/2).try_into()?, (((wnd_h+side) as f32)/2f32).trunc() as i32 + padding_edge);
+        Ok(Self {
             goals_collected: 0u32,
             draw_pos: draw_pos,
             pos: (0i32, 0i32),
-            wnd_width: (wnd_width as i32 - padding),
-            wnd_height: (wnd_height as i32 - padding),
-            tally_width: 4i32,
-            tally_height: 26i32,
-            padding_width: 14i32,
-        }
+            wnd_width: wnd_w as i32,
+            wnd_height: wnd_h as i32,
+            tally_width: tally_width,
+            tally_height: tally_heght,
+            padding_width: padding_between,
+            tallies_per_side: score_per_side
+        })
     }
 
     pub fn draw_tallies(&mut self, canvas: &mut Canvas<Window>) {
@@ -41,24 +63,24 @@ impl ScoreBoard {
             canvas.set_draw_color(Color::RGB(170, 170, 170));
             // Calculate the modulus of the index of the current tally by the
             // number of tallies for the width of game screen
-            let ntallies_per_side: u32 = 65u32; // small test value
-            let nrotations: u32 = (i as f32 / ntallies_per_side as f32).floor() as u32;
+            let nrotations: u32 = (i as f32 / self.tallies_per_side as f32).floor() as u32;
             // Calculate what the drawing position should be if the tick were drawn on the bottom
             // of the screen where it starts (calculate displacement along the bottom
-            self.draw_pos = (self.draw_pos.0+self.padding_width*((i%ntallies_per_side) as i32), self.draw_pos.1);
+            self.draw_pos = (self.draw_pos.0+self.padding_width*((i%self.tallies_per_side) as i32), self.draw_pos.1);
             // Calculate the true position from the drawing position in screen space
             self.pos = self.true_pos(self.draw_pos);
             // Calculate the center of the tally
             self.pos.0 += tally_dimensions.0/2i32;
             self.pos.1 -= tally_dimensions.1/2i32;
-            // Calculate the correct padding to add between tiles
+            // Based on the number of rotations made around the board while counting tallies, swap
+            // width and height of the tallies so they are either vertical or horizontal
             if nrotations % 2 == 0 {
-                self.tally_width = 4i32;
-                self.tally_height = 26i32;
+                self.tally_width = tally_dimensions.0;
+                self.tally_height = tally_dimensions.1;
             }
             else {
-                self.tally_width = 26i32;
-                self.tally_height = 4i32;
+                self.tally_width = tally_dimensions.1;
+                self.tally_height = tally_dimensions.0;
             }
             //                          [cosx -sinx]
             // Use rotation matrix ->   [          ] 

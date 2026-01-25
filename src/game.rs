@@ -34,7 +34,7 @@ impl Game {
             board: Board::new(((wnd_w-side)/2).try_into()?, // center board in x
                                 ((wnd_h-side)/2).try_into()?, // center board in y
                                 side, side),
-            score: ScoreBoard::new(wnd_w, wnd_h),
+            score: ScoreBoard::new(wnd_w, wnd_h, side.try_into()?)?,
             goal: Goal::new(),
             snake: Snake::new(IVec2 {x: 10, y: 10}),
             ft: FrameTimer::new(),

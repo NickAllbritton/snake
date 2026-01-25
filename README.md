@@ -14,6 +14,16 @@ a goal is collected the snake speeds up by 1%.
 
 ![Current look when dead.](./screenshots/Current2.png)
 
+## Keybinds
+Traditional arrow navigation or VIM motions
+-  and **H** for left
+-  and **L** for right 
+-  and **K** for up 
+-  and **J** for down
+Pause/Play with **P**.
+Restart the game with **R**.
+Quit the app with **Q**.
+
 
 ## Resizable 
 Resizable by user, window manager, or operating system to any reasonable degree as seen in the screenshot below.

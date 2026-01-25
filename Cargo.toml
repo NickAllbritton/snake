@@ -7,6 +7,8 @@ description = "Simple snake game powered by SDL3!"
 repository = "https://github.com/NickAllbritton/snake"
 license = "GPL-3.0-or-later"
 readme = "README.md"
+categories = ["games"]
+keywords = ["graphics", "SDL3", "snake", "games"]
 
 [dependencies]
 glam = "0.30.2"

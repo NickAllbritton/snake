@@ -125,7 +125,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8361b0312462d2cf9c115fcbdf9cfceceef79d53faec3b50efd6447ac903eb23"
 
 [[package]]
-name = "snake"
+name = "snick"
 version = "0.3.0"
 dependencies = [
  "glam",

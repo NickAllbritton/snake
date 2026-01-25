@@ -53,6 +53,10 @@ impl Game {
         self.board.board_area = sdl3::rect::Rect::new(((wnd_w-side)/2).try_into()?,
                                                         ((wnd_h-side)/2).try_into()?,
                                                         side, side);
+        let scores = self.score.goals_collected;
+        self.score = ScoreBoard::new(wnd_w, wnd_h, side)?;
+        self.score.goals_collected = scores;
+        
         Ok(())
     }
 

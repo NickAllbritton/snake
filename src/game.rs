@@ -26,14 +26,14 @@ pub struct Game {
 impl Game {
     
     pub fn new(wnd_w: u32, wnd_h: u32) -> Result<Self, Box<dyn Error>> {
-        // TODO: use smaller of the two values as the board length and width
-        // and center both
+        // use smaller of the two values as the board length and width
+        let smallest_side: u32 = std::cmp::min(wnd_w, wnd_h);
+        // Calculate board size
+        let side = smallest_side*9/10; // assume width of window is shortest for now
         Ok(Self {
-            //wnd_width: window_width,
-            //wnd_height: window_height,
-            board: Board::new((wnd_w/20 - 5).try_into()?,
-                                (wnd_h/20 - 5).try_into()?,
-                                wnd_w*9/10, wnd_h*9/10),
+            board: Board::new(((wnd_w-side)/2).try_into()?, // center board in x
+                                ((wnd_h-side)/2).try_into()?, // center board in y
+                                side, side),
             score: ScoreBoard::new(wnd_w, wnd_h),
             goal: Goal::new(),
             snake: Snake::new(IVec2 {x: 10, y: 10}),

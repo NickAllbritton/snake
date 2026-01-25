@@ -27,7 +27,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut canvas = wnd.into_canvas();
 
     // Create game state
-    let mut game = game::Game::new(wnd_width, wnd_height)?;
+    let mut game = game::Game::new(canvas.window().size().0, canvas.window().size().1)?;
     
     let mut running: bool = true;
     let mut event_queue = sdl_context.event_pump()?;
@@ -44,7 +44,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                         // If a player presses R, kill the snake and create a new game
                         sdl3::keyboard::Keycode::R => {
                             game.snake.die();
-                            game = game::Game::new(wnd_width, wnd_height)?;
+                            game = game::Game::new(canvas.window().size().0, canvas.window().size().1)?;
                         }
                         // If a player presses Q, quit the program
                         sdl3::keyboard::Keycode::Q => {

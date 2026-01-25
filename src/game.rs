@@ -25,14 +25,16 @@ pub struct Game {
 
 impl Game {
     
-    pub fn new(window_width: u32, window_height: u32) -> Result<Self, Box<dyn Error>> {
+    pub fn new(wnd_w: u32, wnd_h: u32) -> Result<Self, Box<dyn Error>> {
+        // TODO: use smaller of the two values as the board length and width
+        // and center both
         Ok(Self {
             //wnd_width: window_width,
             //wnd_height: window_height,
-            board: Board::new((window_width/20 - 5).try_into()?,
-                                (window_height/20 - 5).try_into()?,
-                                window_width*9/10, window_height*9/10),
-            score: ScoreBoard::new(window_width, window_height),
+            board: Board::new((wnd_w/20 - 5).try_into()?,
+                                (wnd_h/20 - 5).try_into()?,
+                                wnd_w*9/10, wnd_h*9/10),
+            score: ScoreBoard::new(wnd_w, wnd_h),
             goal: Goal::new(),
             snake: Snake::new(IVec2 {x: 10, y: 10}),
             ft: FrameTimer::new(),
@@ -40,6 +42,12 @@ impl Game {
             pause: false,
             millis_per_move: 90u128
         })
+    }
+
+    pub fn resize_wnd(&mut self, wnd: &Window) -> Result<(), Box<dyn Error>> {
+        // Todo: get the size of the window and calculate the board size from there.
+
+        Ok(())
     }
 
     pub fn draw_wnd(&mut self, canvas: &mut Canvas<Window>) -> Result<(), Box<dyn Error>> {

@@ -147,7 +147,27 @@ impl Game {
                     self.snake.dir = Direction::Right;
                 }
             }
-            _ => {/*Do nothing*/}
+            sdl3::keyboard::Keycode::K => {
+                if current_direction != Direction::Down.vec() {
+                    self.snake.dir = Direction::Up;
+                }
+            }
+            sdl3::keyboard::Keycode::J => {
+                if current_direction != Direction::Up.vec() {
+                    self.snake.dir = Direction::Down;
+                }
+            }
+            sdl3::keyboard::Keycode::H => {
+                if current_direction != Direction::Right.vec() {
+                    self.snake.dir = Direction::Left;
+                }
+            }
+            sdl3::keyboard::Keycode::L => {
+                if current_direction != Direction::Left.vec() {
+                    self.snake.dir = Direction::Right;
+                }
+            }
+           _ => {/*Do nothing*/}
         }
     }
 

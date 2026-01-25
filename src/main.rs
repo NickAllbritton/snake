@@ -26,8 +26,12 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let mut canvas = wnd.into_canvas();
 
+    // if window manager resizes window after creation update the window dimensions
+    let wnd_width = canvas.window().size_in_pixels().0; 
+    let wnd_height = canvas.window().size_in_pixels().1;
+
     // Create game state
-    let mut game = game::Game::new(canvas.window().size().0, canvas.window().size().1)?;
+    let mut game = game::Game::new(wnd_width, wnd_height)?;
     
     let mut running: bool = true;
     let mut event_queue = sdl_context.event_pump()?;
@@ -38,13 +42,21 @@ fn main() -> Result<(), Box<dyn Error>> {
                 sdl3::event::Event::Quit {..} => {
                     running = false;
                 }
+                sdl3::event::Event::Window {win_event, ..} => {
+                    if win_event.is_same_kind_as(&sdl3::event::WindowEvent::Resized(0, 0)) {
+                        // on window resize redraw screen
+                        let wnd_width = canvas.window().size_in_pixels().0; 
+                        let wnd_height = canvas.window().size_in_pixels().1;
+                        game.resize_wnd(wnd_width, wnd_height)?;
+                    }
+                }
                 sdl3::event::Event::KeyDown {keycode, ..} => {
                     let key = keycode.expect("Keycode invalid for key down event!");
                     match key {
                         // If a player presses R, kill the snake and create a new game
                         sdl3::keyboard::Keycode::R => {
                             game.snake.die();
-                            game = game::Game::new(canvas.window().size().0, canvas.window().size().1)?;
+                            game = game::Game::new(canvas.window().size_in_pixels().0, canvas.window().size_in_pixels().1)?;
                         }
                         // If a player presses Q, quit the program
                         sdl3::keyboard::Keycode::Q => {

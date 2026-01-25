@@ -28,8 +28,8 @@ impl Game {
     pub fn new(wnd_w: u32, wnd_h: u32) -> Result<Self, Box<dyn Error>> {
         // use smaller of the two values as the board length and width
         let smallest_side: u32 = std::cmp::min(wnd_w, wnd_h);
-        // Calculate board size
-        let side = smallest_side*9/10; // assume width of window is shortest for now
+        // Calculate board size 90% of smallest window size
+        let side = smallest_side*9/10; 
         Ok(Self {
             board: Board::new(((wnd_w-side)/2).try_into()?, // center board in x
                                 ((wnd_h-side)/2).try_into()?, // center board in y
@@ -44,9 +44,15 @@ impl Game {
         })
     }
 
-    pub fn resize_wnd(&mut self, wnd: &Window) -> Result<(), Box<dyn Error>> {
-        // Todo: get the size of the window and calculate the board size from there.
+    pub fn resize_wnd(&mut self, wnd_w: u32, wnd_h: u32) -> Result<(), Box<dyn Error>> {
+        // use smaller of the two values as the board length and width
+        let smallest_side: u32 = std::cmp::min(wnd_w, wnd_h);
+        // Calculate board size 90% of smallest window size
+        let side = smallest_side*9/10; // assume width of window is shortest for now
 
+        self.board.board_area = sdl3::rect::Rect::new(((wnd_w-side)/2).try_into()?,
+                                                        ((wnd_h-side)/2).try_into()?,
+                                                        side, side);
         Ok(())
     }
 

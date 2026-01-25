@@ -2,7 +2,7 @@
 name = "snake"
 version = "0.3.0"
 authors = ["Nick <nickallbritton@proton.me>"]
-edition = "2026"
+edition = "2024"
 description = "Simple snake game powered by SDL3!"
 repository = "https://github.com/NickAllbritton/snake"
 license = "GPL-3.0-or-later"
